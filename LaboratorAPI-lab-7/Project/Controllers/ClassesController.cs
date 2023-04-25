@@ -1,5 +1,8 @@
-﻿using Core.Dtos;
+﻿using Auth0.ManagementApi.Models.Rules;
+using Core.Dtos;
 using Core.Services;
+using DataLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Project.Controllers
@@ -28,7 +31,6 @@ namespace Project.Controllers
 
             return Ok(result);
         }
-
         [HttpGet("get-all")]
         public ActionResult<List<ClassViewDto>> GetAll()
         {

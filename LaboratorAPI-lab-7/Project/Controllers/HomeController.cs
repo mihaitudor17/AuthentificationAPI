@@ -1,63 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
+﻿using Auth0.ManagementApi.Models.Rules;
+using DataLayer.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Core.Services;
 namespace Project.Controllers
 {
-    /* [ApiController]
-     [Route("api/home")]
-     public class HomeController : ControllerBase
-     {
-
-
-         [HttpGet("example-get")]
-         public ActionResult<string> Get()
-         {
-             return Ok("This is a simple example for [GET] http://localhost5000/api/home/example-get");
-         }
-
-         [HttpGet("example-get-route-data")]
-         public ActionResult<string> GetWith_RouteParameter([FromRoute] int data)
-         {
-             return Ok($"This is a simple example for [GET] http://localhost5000/api/home/example-get/{data}");
-         }
-
-         [HttpGet("example-get-queryparam-data")]
-         public ActionResult<string> GetWith_QueryParameter([FromQuery] int data)
-         {
-             return Ok($"This is a simple example for [GET] http://localhost5000/api/home/example-get/?data={data}");
-         }
-
-         [HttpPost("example-post-simple")]
-         public ActionResult<string> Post([FromBody] int data)
-         {
-            *//*
-             * Request body can be:
-             * 123
-             *//*
-
-             var result = $"This is a simple example for [POST] http://localhost5000/api/home/example-post\n";
-             result += $"Data is: {data}";
-
-             return Ok(result);
-         }
-
-         [HttpPost("example-post-json")]
-         public ActionResult<string> Post_Json([FromBody] Payload payload)
-         {
-             *//*
-              * Request body can be:
-              * { "data" : 123 }
-              *//*
-
-             var result = $"This is a simple example for [POST] http://localhost5000/api/home/example-post\n";
-             result += $"Data is: {payload?.Data}";
-
-             return Ok(result);
-
-
-     } }*/
-
-    /*public class Payload
+    [ApiController]
+    [Route("api/home")]
+    public class HomeController : ControllerBase
     {
-        public int Data { get; set; }
-    }*/
+        private readonly IConfiguration _config;
+
+        public HomeController(IConfiguration config)
+        {
+            _config = config;
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginRequest request)
+        {
+            // Verify the user's credentials (e.g. username and password) here
+            // ...
+
+            // Retrieve the user's information from the database or another data source
+            var user = new User
+            {
+                Id = 123,
+                Username = "jdoe",
+                Role = "admin"
+            };
+
+            // Generate a JWT token based on the user's information
+            var tokenGenerator = new JwtService(_config);
+            var token = tokenGenerator.GenerateToken(user);
+
+            // Return the token to the client as part of the API response
+            return Ok(new { token });
+        }
+    }
 }
