@@ -1,4 +1,5 @@
 using Core.Services;
+using DataLayer.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Project.Settings;
@@ -8,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 Dependencies.Inject(builder);
-
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<JwtService>();
 string jwtKey = builder.Services.BuildServiceProvider().GetRequiredService<JwtService>().GenerateRandomKey();
@@ -27,6 +29,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey))
         };
     });
+
 
 var app = builder.Build();
 
