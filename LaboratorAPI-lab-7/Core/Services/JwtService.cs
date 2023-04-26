@@ -1,4 +1,5 @@
-﻿using DataLayer.Entities;
+﻿using DataLayer.Dtos;
+using DataLayer.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Drawing;
@@ -29,7 +30,7 @@ namespace Core.Services
             return Convert.ToBase64String(key);
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(UserDto user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtKey);
@@ -39,8 +40,8 @@ namespace Core.Services
                 Subject = new ClaimsIdentity(new[]
                 {
                 new Claim("userId", user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             }),
                 Expires = DateTime.UtcNow.AddMinutes(int.Parse(_config["Jwt:ExpiresInMinutes"])),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace Core.Dtos
         [Required] 
         public string Username { get; set; }
         [Required]
-        public string Role { get; set; }
+        public RoleType Role { get; set; }
     }
 }

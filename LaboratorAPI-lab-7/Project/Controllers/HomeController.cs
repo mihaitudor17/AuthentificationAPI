@@ -3,6 +3,8 @@ using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Core.Services;
 using Core.Dtos;
+using Microsoft.EntityFrameworkCore;
+using DataLayer.Dtos;
 
 namespace Project.Controllers
 {
@@ -20,24 +22,15 @@ namespace Project.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public IActionResult Login(UserDto user)
         {
-            // Verify the user's credentials (e.g. username and password) here
-            // ...
-
-            // Retrieve the user's information from the database or another data source
-            var user = new User
+            var result = userService.GetByUserName(user.UserName);
+            if (result == null)
             {
-                Id = 123,
-                Username = "jdoe",
-                Role = "admin"
-            };
-
-            // Generate a JWT token based on the user's information
+                return BadRequest("Student not fount");
+            }
             var tokenGenerator = new JwtService(_config);
-            var token = tokenGenerator.GenerateToken(user);
-
-            // Return the token to the client as part of the API response
+            var token = tokenGenerator.GenerateToken(result);
             return Ok(new { token });
         }
 

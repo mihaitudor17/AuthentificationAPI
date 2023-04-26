@@ -29,8 +29,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey))
         };
     });
-
-
+builder.Services.AddSwaggerGen(options => {
+    options.EnableAnnotations();
+});
 var app = builder.Build();
 
 app.UseSwagger(c =>

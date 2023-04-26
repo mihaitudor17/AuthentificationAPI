@@ -1,7 +1,8 @@
 ﻿using Core.Dtos;
 using DataLayer;
+using DataLayer.Dtos;
 using DataLayer.Entities;
-
+using DataLayer.Mapping;
 
 namespace Core.Services
 {
@@ -32,6 +33,10 @@ namespace Core.Services
             unitOfWork.SaveChanges();
 
             return payload;
+        }
+        public UserDto GetByUserName(string username)
+        {
+            return unitOfWork.Users.GetAll().FirstOrDefault(user => user.Username == username).ToUserDto();
         }
     }
 }
