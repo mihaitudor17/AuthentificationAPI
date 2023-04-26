@@ -18,7 +18,7 @@ namespace Project.Controllers
         {
             this.classService = classService;
         }
-
+        [Authorize(Roles = "Profesor")]
         [HttpPost("add")]
         public IActionResult Add(ClassAddDto payload)
         {
@@ -31,6 +31,7 @@ namespace Project.Controllers
 
             return Ok(result);
         }
+        [Authorize(Roles = "Student")]
         [HttpGet("get-all")]
         public ActionResult<List<ClassViewDto>> GetAll()
         {
