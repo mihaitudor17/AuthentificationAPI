@@ -5,6 +5,7 @@ using Core.Services;
 using Core.Dtos;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Project.Controllers
 {
@@ -14,11 +15,13 @@ namespace Project.Controllers
     {
         private readonly IConfiguration _config;
         private readonly UserService userService;
+        private readonly GradesService gradeService;
 
-        public HomeController(IConfiguration config, UserService userService)
+        public HomeController(IConfiguration config, UserService userService, GradesService gradeService)
         {
             _config = config;
             this.userService = userService;
+            this.gradeService = gradeService;
         }
 
         [HttpPost("login")]
@@ -46,5 +49,19 @@ namespace Project.Controllers
 
             return Ok(result);
         }
+        [Authorize(Roles = "Profesor")]
+        [HttpPost("get-all-grades")]
+        public IActionResult GetResult()
+        {
+            var result = gradeService.GetAll();
+
+            if (result == null)
+            {
+                return BadRequest("Class cannot be added");
+            }
+
+            return Ok(result);
+        }
+
     }
 }
