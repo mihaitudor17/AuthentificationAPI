@@ -22,5 +22,9 @@ namespace Core.Services
             return unitOfWork.Students.GetAll().ToDictionary(student => student.FirstName+" "+student.LastName,
                                                              student => student.Grades);                            
         }
+        public List<Grade> GetGrades(int id) 
+        {
+            return unitOfWork.Students.GetById(id).Grades;
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace Project.Controllers
         }
         [Authorize(Roles = "Profesor")]
         [HttpPost("get-all-grades")]
-        public IActionResult GetResult()
+        public ActionResult<Dictionary<string, List<Grade>>> GetAll()
         {
             var result = gradeService.GetAll();
 
@@ -63,5 +63,18 @@ namespace Project.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Student")]
+        [HttpPost("get-grades")]
+        public ActionResult<List<Grade>> GetResult(int id)
+        {
+            var result = gradeService.GetGrades(id);
+
+            if (result == null)
+            {
+                return BadRequest("Class cannot be added");
+            }
+
+            return Ok(result);
+        }
     }
 }
